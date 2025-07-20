@@ -1,0 +1,68 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Add Goal</title>
+<link rel="stylesheet" href="{% static 'css/addgoal.css' %}">
+</head>
+<body>
+ <nav class="navbar">
+    <div class="logo">Finance Manager</div>
+    <div class="navbar-links">
+      <a href="{% url 'dashboard' %}">Dasboard</a>
+      <a href="{% url 'addtransaction' %}">Add Transaction</a>
+      <a href="{% url 'addgoal' %}">Add Goal</a>
+      <a href="{% url 'transaction' %}">Transaction</a>
+    <form method="post" action="{% url 'logout' %}" style="display:inline;">
+  {% csrf_token %}
+  <button type="submit" class="logout-button" style="background: none; border: none; color: #3498db; cursor: pointer;">Logout</button>
+</form>
+
+    </div>
+  </nav>
+   <div class="form-container">
+    <h2>Add New Goal</h2>
+    <form id="goalForm">
+      <label for="goalName">Goal Name</label>
+      <input type="text" id="goalName" required>
+
+      <label for="targetAmount">Target Amount (₹)</label>
+      <input type="number" id="targetAmount" required>
+
+      <label for="currentAmount">Current Amount (₹)</label>
+      <input type="number" id="currentAmount" required>
+
+      <label for="deadline">Deadline Date</label>
+      <input type="date" id="deadline" required>
+
+      <button type="submit">Add Goal</button>
+    </form>
+
+    <a href="{% url 'dashboard' %}" class="return-btn">← Return to Dashboard</a>
+  </div> 
+<script>
+    // Inside <script> tag
+document.getElementById("goalForm").addEventListener("submit", function(e) {
+  e.preventDefault();
+
+  const goal = {
+    name: document.getElementById("goalName").value,
+    target: document.getElementById("targetAmount").value,
+    current: document.getElementById("currentAmount").value,
+    deadline: document.getElementById("deadline").value
+  };
+
+  let goals = JSON.parse(localStorage.getItem("goals")) || [];
+  goals.push(goal);
+  localStorage.setItem("goals", JSON.stringify(goals));
+
+  alert("Goal added successfully!");
+  this.reset();
+});
+
+  </script>
+
+</body>
+</html>

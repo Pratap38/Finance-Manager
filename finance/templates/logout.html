@@ -1,0 +1,41 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Logout - Finance View Tracker</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="{% static 'css/logout.css' %}">
+</head>
+<body>
+
+  <!-- ✅ Navbar -->
+  <nav class="navbar">
+    <div class="logo">Finance Manager</div>
+    <div class="navbar-links">
+      <form method="post" action="{% url 'login' %}">
+        {% csrf_token %}
+        <button type="submit" class="nav-btn">Login</button>
+      </form>
+    </div>
+  </nav>
+
+  <!-- ✅ Logout Confirmation -->
+  <div class="logout-container">
+    <h2>You have been logged out</h2>
+    <p>Thank you for using Finance View Tracker.</p>
+
+    <!-- ✅ Redirect Button with Clear -->
+    <form method="get" action="{% url 'login' %}">
+      <button type="submit" class="login-button" onclick="clearStorage()">Go to Login</button>
+    </form>
+  </div>
+
+  <script>
+    function clearStorage() {
+      localStorage.clear();
+    }
+  </script>
+
+</body>
+</html>

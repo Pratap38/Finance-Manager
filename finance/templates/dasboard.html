@@ -1,0 +1,108 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="{% static 'css/dasboard.css' %}">
+  <title>Dashboard</title>
+</head>
+<body>
+
+  <!-- ✅ Navbar -->
+  <nav class="navbar">
+    <div class="logo">Finance Manager</div>
+    <div class="navbar-links">
+      <a href="{% url 'addtransaction' %}">Add Transaction</a>
+      <a href="{% url 'addgoal' %}">Add Goal</a>
+      <a href="{% url 'transaction' %}">Transaction</a>
+     <form method="post" action="{% url 'logout' %}" style="display:inline;">
+  {% csrf_token %}
+  <button type="submit" class="logout-button" style="background: none; border: none; color: #3498db; cursor: pointer;">Logout</button>
+</form>
+
+    </div>
+  </nav>
+
+  <!-- ✅ Greeting -->
+  <div class="dasboard-cantainer">
+    <h2>Welcome {{ request.user.username }}!</h2>
+  </div>
+
+  <!-- ✅ Summary Block -->
+ <div class="sunnary-block">
+  <div class="total-income">Total Income<br><span>₹{{ total_income|floatformat:2 }}</span></div>
+  <div class="total-expenses">Total Expenses<br><span>₹{{ total_expense|floatformat:2 }}</span></div>
+  <div class="total-saving">Total Saving<br><span>₹{{ total_saving|floatformat:2 }}</span></div>
+</div>
+
+
+  <!-- ✅ Goal Section -->
+  <div class="goals-section">
+    <h3>Your Goals</h3>
+    <ul class="goals-list" id="goalList">
+      <!-- Goals will be dynamically inserted by JavaScript -->
+    </ul>
+
+    <!-- Add Goal Button -->
+    <a href="{% url 'addgoal' %}" class="add-goal-btn">+ Add New Goal</a>
+  </div>
+
+  <!-- ✅ Goal Logic Script -->
+  <script>
+    let goals = JSON.parse(localStorage.getItem("goals")) || [];
+    const goalList = document.getElementById("goalList");
+
+    function renderGoals() {
+      goalList.innerHTML = '';
+
+      goals.forEach((goal, index) => {
+        const percent = Math.min(Math.floor((goal.current / goal.target) * 100), 100);
+
+        const li = document.createElement("li");
+        li.innerHTML = `
+          <div class="goal-item">
+            <div class="goal-info">
+              <strong>${goal.name}</strong>
+              <div>₹${goal.current} / ₹${goal.target}</div>
+              <small>Deadline: ${goal.deadline}</small>
+            </div>
+            <div class="progress-circle">
+              <svg>
+                <circle cx="30" cy="30" r="28"></circle>
+                <circle cx="30" cy="30" r="28" style="stroke-dashoffset: ${176 - (176 * percent / 100)};"></circle>
+              </svg>
+              <div class="progress-text">${percent}%</div>
+            </div>
+          </div>
+          <div class="goal-actions">
+            <button onclick="editGoal(${index})">Edit</button>
+            <button onclick="deleteGoal(${index})">Delete</button>
+          </div>
+        `;
+        goalList.appendChild(li);
+      });
+    }
+
+    function deleteGoal(index) {
+      if (confirm("Delete this goal?")) {
+        goals.splice(index, 1);
+        localStorage.setItem("goals", JSON.stringify(goals));
+        renderGoals();
+      }
+    }
+
+    function editGoal(index) {
+      const updated = prompt("Enter updated current amount:", goals[index].current);
+      if (updated !== null) {
+        goals[index].current = updated;
+        localStorage.setItem("goals", JSON.stringify(goals));
+        renderGoals();
+      }
+    }
+
+    renderGoals();
+  </script>
+
+</body>
+</html>

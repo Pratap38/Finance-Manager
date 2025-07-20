@@ -1,0 +1,59 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{% static 'css/addtransaction.css' %}">
+  <title>Adding Transaction</title>
+</head>
+<body>
+
+  <!-- ✅ Navbar -->
+  <nav class="navbar">
+    <div class="logo">Finance Manager</div>
+    <div class="navbar-links">
+      <a href="{% url 'dashboard' %}">Dasboard</a>
+      <a href="{% url 'addtransaction' %}">Add Transaction</a>
+      <a href="{% url 'addgoal' %}">Add Goal</a>
+      <a href="{% url 'transaction' %}">Transaction</a>
+      <form method="post" action="{% url 'logout' %}" style="display:inline;">
+        {% csrf_token %}
+        <button type="submit" class="logout-button" style="background: none; border: none; color: #3498db; cursor: pointer;">Logout</button>
+      </form>
+    </div>
+  </nav>
+
+  <!-- ✅ Transaction Form -->
+  <div class="form-container">
+    <h2>Add New Transaction</h2>
+    <form method="post" action="">
+      {% csrf_token %}
+
+      <label for="title">Title</label>
+      <input type="text" id="title" name="title" required>
+
+      <label for="amount">Amount (₹)</label>
+      <input type="number" id="amount" name="amount" required>
+
+      <label for="transaction_type">Type</label>
+      <select id="transaction_type" name="transaction_type" required>
+        <option value="">Select</option>
+        <option value="income">Income</option>
+        <option value="expense">Expense</option>
+      </select>
+
+      <label for="date">Date</label>
+      <input type="date" id="date" name="date" required>
+
+      <label for="category">Category</label>
+      <input type="text" id="category" name="category" required>
+
+      <button type="submit">Add Transaction</button>
+    </form>
+
+    <a href="{% url 'dashboard' %}" class="return-btn">← Return to Dashboard</a>
+  </div>
+
+</body>
+</html>

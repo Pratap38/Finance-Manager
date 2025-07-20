@@ -1,0 +1,66 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Transactions</title>
+  <link rel="stylesheet" href="{% static 'css/transaction.css' %}">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="logo">Finance Manager</div>
+    <div class="navbar-links">
+      <a href="{% url 'dashboard' %}">Dashboard</a>
+      <a href="{% url 'addtransaction' %}">Add Transaction</a>
+      <a href="{% url 'addgoal' %}">Add Goal</a>
+      <a href="{% url 'transaction' %}">Transaction</a>
+      <form method="post" action="{% url 'logout' %}" style="display:inline;">
+  {% csrf_token %}
+  <button type="submit" class="nav-link logout-button">Logout</button>
+</form>
+    </div>
+  </nav>
+
+  <div class="transaction-container">
+    <h2>Transaction Report</h2>
+    <table id="transactionTable">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Amount (₹)</th>
+          <th>Type</th>
+          <th>Date</th>
+          <th>Category</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for t in transactions %}
+        <tr>
+          <td>{{ t.title }}</td>
+          <td>₹{{ t.amount }}</td>
+          <td>{{ t.transaction_type }}</td>
+          <td>{{ t.date }}</td>
+          <td>{{ t.category }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="5">No transactions found.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <button id="downloadBtn">Download as Excel</button>
+  </div>
+
+  <script>
+    document.getElementById("downloadBtn").addEventListener("click", function () {
+      const table = document.getElementById("transactionTable");
+      const wb = XLSX.utils.table_to_book(table, { sheet: "Transactions" });
+      XLSX.writeFile(wb, "Transaction_Report.xlsx");
+    });
+  </script>
+</body>
+</html>

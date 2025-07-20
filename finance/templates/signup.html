@@ -1,0 +1,59 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="{% static 'css/sign.css' %}">
+  <title>Signup</title>
+</head>
+<body>
+
+  <div class="nav-bar">
+    <div class="Logo">Finance View Tracker</div>
+    <div class="nav-links">
+      <a href="{% url 'login' %}">Login</a>
+      <a href="{% url 'signup' %}">Sign-Up</a>
+    </div>
+  </div>
+
+  <div class="signup-cantainer">
+    <h1>Signup Here First</h1>
+
+    <form method="post" action="">
+      {% csrf_token %}
+
+      {% if error %}
+        <p style="color:red;">{{ error }}</p>
+      {% endif %}
+
+      <div class="input-groups">
+        <label for="username">Username</label><br>
+        <input type="text" name="username" id="username" required placeholder="Enter the username">
+      </div>
+
+      <div class="input-groups">
+        <label for="email">Enter Email</label><br>
+        <input type="email" name="email" id="email" required placeholder="abc@gmail.com">
+      </div>
+
+      <div class="input-groups">
+        <label for="password1">Password</label><br>
+        <input type="password" name="password1" id="password1" required placeholder="Enter the password">
+      </div>
+
+      <div class="input-groups">
+        <label for="password2">Confirm Password</label><br>
+        <input type="password" name="password2" id="password2" required placeholder="Confirm the password">
+      </div>
+
+      <button type="submit" class="login-button">Sign-Up</button>
+    </form>
+  </div>
+
+  <div class="login-footer">
+    <p>Have an account? <a href="{% url 'login' %}">Login</a></p>
+  </div>
+
+</body>
+</html>
